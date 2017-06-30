@@ -12,7 +12,8 @@ function QABS() {
 
   QABS.quickTarget = _PARAMS['Quick Target'];
   QABS.lockTargeting = _PARAMS['Lock when Targeting'];
-  QABS.towardsMouse = _PARAMS['Attack Towards Mouse'];
+  QABS.towardsMouse = _PARAMS['Aim with Mouse'];
+  QABS.towardsAnalog = _PARAMS['Aim with Analog']
   QABS.radianAtks = QMovement.offGrid;
 
   QABS.lootDecay = _PARAMS['Loot Decay'];
@@ -48,7 +49,7 @@ function QABS() {
   QABS.stringToSkillKeyObj = function(string) {
     var obj = QPlus.stringToObj(string);
     for (var key in obj) {
-      var data = obj[key].split(' ').filter(function(i) {
+      var data = String(obj[key]).split(' ').filter(function(i) {
         return i !== '';
       }).map(function(i) {
         return i.trim();
