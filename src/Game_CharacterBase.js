@@ -66,9 +66,9 @@
     return Alias_Game_CharacterBase_canMove.call(this);
   };
 
-  Game_CharacterBase.prototype.canInputSkill = function() {
+  Game_CharacterBase.prototype.canInputSkill = function(fromEvent) {
     if (this._globalLocked > 0) return false;
-    if ($gameMap.isEventRunning()) return false;
+    if (!fromEvent && $gameMap.isEventRunning()) return false;
     if (!$gameSystem._absEnabled) return false;
     if (!this.battler()) return false;
     if (this.battler().isDead()) return false;
@@ -165,7 +165,12 @@
   };
 
   Game_CharacterBase.prototype.updateABS = function() {
-    if (this.battler().hp <= 0) return this.onDeath();
+    if (this.battler().isDead()) {
+      if (!this._isDead) {
+        this.onDeath();
+      }
+      return;
+    }
     this.updateSkills();
     this.battler().updateABS();
   };
@@ -216,8 +221,8 @@
     this._selectTargeting = null;
   };
 
-  Game_CharacterBase.prototype.useSkill = function(skillId) {
-    if (!this.canInputSkill()) return null;
+  Game_CharacterBase.prototype.useSkill = function(skillId, fromEvent) {
+    if (!this.canInputSkill(fromEvent)) return null;
     if (!this.canUseSkill(skillId)) return null;
     if (this._groundTargeting) {
       this.onTargetingCancel();
